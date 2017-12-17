@@ -1,0 +1,178 @@
+config("gtest_config") {
+  visibility = [ ":*" ]  # gmock also shares this config.
+  defines = [
+    # In order to allow regex matches in gtest to be shared between Windows
+    # and other systems, we tell gtest to always use its internal engine.
+    "GTEST_HAS_POSIX_RE=0",
+    "GTEST_LANG_CXX11=1",
+  ]
+  include_dirs = [
+    "libs/googletest/googletest/include",
+  ]
+}
+
+source_set("gtest") {
+  testonly = true
+  sources = [
+    "libs/googletest/googletest/src/gtest-death-test.cc",
+    "libs/googletest/googletest/src/gtest-filepath.cc",
+    "libs/googletest/googletest/src/gtest-port.cc",
+    "libs/googletest/googletest/src/gtest-printers.cc",
+    "libs/googletest/googletest/src/gtest-test-part.cc",
+    "libs/googletest/googletest/src/gtest-typed-test.cc",
+    "libs/googletest/googletest/src/gtest.cc",
+  ]
+  include_dirs = [
+    "libs/googletest/googletest",
+  ]
+  all_dependent_configs = [
+    ":gtest_config"
+  ]
+}
+
+source_set("gtest_main") {
+  testonly = true
+  sources = [
+    "libs/googletest/googletest/src/gtest_main.cc",
+  ]
+  deps = [
+    ":gtest",
+  ]
+}
+
+source_set("gmock") {
+  testonly = true
+  sources = [
+    "libs/googletest/googlemock/src/gmock-cardinalities.cc",
+    "libs/googletest/googlemock/src/gmock-internal-utils.cc",
+    "libs/googletest/googlemock/src/gmock-matchers.cc",
+    "libs/googletest/googlemock/src/gmock-spec-builders.cc",
+    "libs/googletest/googlemock/src/gmock.cc",
+  ]
+  include_dirs = [
+    "libs/googletest/googletest/include",
+    "libs/googletest/googlemock/include",
+  ]
+  public_configs = [
+    ":gtest_config",
+  ]
+}
+
+source_set("json") {
+  testonly = true
+  sources = [
+    "libs/json/src/json.hpp",
+  ]
+  include_dirs = [
+    "libs/json/src",
+  ]
+}
+
+source_set("fmem") {
+  testonly = true
+  sources = [
+    "libs/gherkin-cpp/libs/fmem/src/alloc.c",
+    #"libs/gherkin-cpp/libs/fmem/src/fmem-fopencookie.c",
+    #"libs/gherkin-cpp/libs/fmem/src/fmem-funopen.c",
+    "libs/gherkin-cpp/libs/fmem/src/fmem-open_memstream.c",
+    #"libs/gherkin-cpp/libs/fmem/src/fmem-tmpfile.c",
+    #"libs/gherkin-cpp/libs/fmem/src/fmem-winapi-tmpfile.c",
+  ]
+  include_dirs = [
+    "libs/gherkin-cpp/libs/fmem/include",
+  ]
+}
+
+source_set("gherkin-c") {
+  testonly = true
+  sources = [
+    "libs/gherkin-cpp/libs/gherkin-c/src/ast_builder.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/ast_node.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/ast_printer.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/attachment_event.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/background.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/comment.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/compiler.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/data_table.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/dialect.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/doc_string.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/error.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/error_list.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/event.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/example_table.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/feature.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/file_reader.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/file_token_scanner.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/file_utf8_source.c",
+    #"libs/gherkin-cpp/libs/gherkin-c/src/gherkin_cli.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/gherkin_document.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/gherkin_document_event.c",
+    #"libs/gherkin-cpp/libs/gherkin-c/src/gherkin_generate_tokens.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/gherkin_line.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/item_queue.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/parser.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_cell.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_event.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_location.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_printer.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_row.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_step.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_string.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_table.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/pickle_tag.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/print_utilities.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/scenario.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/scenario_outline.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/source_event.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/step.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/string_token_scanner.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/string_utilities.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/table_cell.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/table_row.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/tag.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/token.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/token_formatter_builder.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/token_matcher.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/token_queue.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/token_scanner.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/unicode_utilities.c",
+    "libs/gherkin-cpp/libs/gherkin-c/src/utf8_source.c",
+  ]
+  include_dirs = [
+    "libs/gherkin-cpp/libs/gherkin-c/include",
+    "libs/gherkin-cpp/libs/gherkin-c/src",
+  ]
+}
+
+source_set("gherkin-cpp") {
+  testonly = true
+  sources = [
+    "libs/gherkin-cpp/src/compiler.cpp",
+    "libs/gherkin-cpp/src/parser.cpp",
+  ]
+  include_dirs = [
+    "libs/gherkin-cpp/include",
+    "libs/gherkin-cpp/libs/fmem/include",
+    "libs/gherkin-cpp/libs/gherkin-c/include",
+    "libs/gherkin-cpp/libs/gherkin-c/src",
+  ]
+  deps = [
+    ":fmem",
+    ":gherkin-c",
+  ]
+}
+
+source_set("GUnit") {
+  testonly = true
+  deps = [
+    ":gtest",
+    ":gmock",
+    ":json",
+    ":gherkin-cpp",
+  ]
+
+  include_dirs = [
+    "include",
+  ]
+}
